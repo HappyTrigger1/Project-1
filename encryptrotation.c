@@ -7,17 +7,36 @@
 //m is the message, k is the key shift. 
 //e(m) is used to encrypt a message.
 //d(c) is used to decrypt a message. 
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
 
-
-#include <stdio.h>
-
-int main(){
-
-   
-
-  return 0;
+void decrypt(char arr[]){
+      int i;
+      for(i = 0; i < strlen(arr); i++)
+      {
+            arr[i] = arr[i] + 10;
+      }
 }
 
+void encrypt(char arr[]){
+      int i;
+      for(i = 0; i < strlen(arr); i++)
+      {
+            arr[i] = arr[i] - 10;
+      }
+}
 
-
-    
+int main()
+{
+      char word[40];	
+      int ch;
+      printf("Enter a word:\t");
+      scanf("%s", word);
+      printf("\nword:\t%s\n",word);
+      encrypt(word);
+      printf("\nEncrypted word:\t%s\n", word);
+      decrypt(word);
+      printf("\nDecrypted word:\t%s\n", word);
+      return 0;
+}
