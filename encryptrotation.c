@@ -6,6 +6,25 @@
 #include<stdlib.h>
 #include<string.h>
 
+
+void decrypt(char arr[]);                           //Function prototype for decrypting
+void encrypt(char arr[]);                           //Function prototype for encrypting
+
+int main(){
+      char word[40];	                            //char data type
+      printf("Enter a word:\t");
+      scanf("%s", word);                            //scan for a string, store in "word"
+      printf("\nword:\t%s\n",word);
+      encrypt(word);                                //perform encryption function on "word"
+      printf("\nEncrypted word:\t%s\n", word);
+      decrypt(word);                                //perform decryption function on "word"
+      printf("\nDecrypted word:\t%s\n", word);
+      return 0;
+}
+
+
+
+
 //Function for decryption
 void decrypt(char arr[]){
       int i;
@@ -20,17 +39,4 @@ void encrypt(char arr[]){
       for(i = 0; i < strlen(arr); i++){
             arr[i] = arr[i] + 1;                    //shifts letters across 1 for encryption
       }
-}
-
-int main(){
-      char word[40];	                            //char data type
-      int ch;
-      printf("Enter a word:\t");
-      scanf("%s", word);                            //scan for a string, store in "word"
-      printf("\nword:\t%s\n",word);
-      encrypt(word);                                //perform encryption function on "word"
-      printf("\nEncrypted word:\t%s\n", word);
-      decrypt(word);                                //perform decryption function on ""
-      printf("\nDecrypted word:\t%s\n", word);
-      return 0;
 }
