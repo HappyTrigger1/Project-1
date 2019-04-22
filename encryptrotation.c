@@ -32,16 +32,18 @@ void encryption(char arr[]){
     output = fopen("output.txt", "w");               //Sets up file output.txt for writing
     int i;
     fprintf(output,"Encrypted Message: ");
+    
     for(i = 0; i < strlen(arr); i++){
         arr[i] = arr[i] + 1;                         //Shifts letters across 1 for encryption
         fprintf(output, "%c", arr[i]);               //Writes the encrypted word to output.txt
-    }
+        }
       
     fprintf(output, "\nDecrypted Message: ");
     int k;
-        for(k = 0; k < strlen(arr); k++){
-            arr[k] = arr[k] - 1;                     //shifts letters across 1 for encryption
-            fprintf(output, "%c", arr[k]);           //Writes the decrypted word to output.txt
+    
+    for(k = 0; k < strlen(arr); k++){
+        arr[k] = arr[k] - 1;                     //shifts letters across 1 for encryption
+        fprintf(output, "%c", arr[k]);           //Writes the decrypted word to output.txt
         }
 }
 
