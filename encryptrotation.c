@@ -42,8 +42,8 @@ void encryption(char arr[]){
     int k;
     
     for(k = 0; k < strlen(arr); k++){
-        arr[k] = arr[k] - 1;                     //shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[k]);           //Writes the decrypted word to output.txt
+        arr[k] = arr[k] - 1;                        //shifts letters across 1 for encryption
+        fprintf(output, "%c", arr[k]);              //Writes the decrypted word to output.txt
         }
 }
 
