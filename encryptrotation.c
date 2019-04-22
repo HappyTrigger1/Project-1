@@ -31,14 +31,14 @@ void encryption(char arr[]){
     FILE *output;                                    //Establishes a file output.txt
     output = fopen("output.txt", "w");               //Sets up file output.txt for writing
     int i;
-    fprintf(output,"Encrypted Message: ");
+    fprintf(output,"Encrypted (Rotation) Message: ");
     
     for(i = 0; i < strlen(arr); i++){
         arr[i] = arr[i] + 1;                         //Shifts letters across 1 for encryption
         fprintf(output, "%c", arr[i]);               //Writes the encrypted word to output.txt
         }
       
-    fprintf(output, "\nDecrypted Message: ");
+    fprintf(output, "\nDecrypted (Rotation) Message: ");
     int k;
     
     for(k = 0; k < strlen(arr); k++){
