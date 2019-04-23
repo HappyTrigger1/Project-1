@@ -1,52 +1,65 @@
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
+
+int index(char code[], char char_to_find);
+char* encrypt(char *message, char code[]);
+char *decrypt(char *message, char code[]);
 
 
-void encryption(char arr[]);                           //Function prototype for encrypting
-void decryption(char arr[]);                           //Function prototype for decrypting
-
-
-int main() {
-
-    FILE *input;                                       //Establishes a file input.txt
-    char c[200];
-    int i = 0;
+int main(){
+    char *message = "test message";
+    char code[26] = {'b','a','c','d','s','f','g','g','h','i','j','k','l','m','n','o','p','q','r','e','t','u','v','w','x','y','z'};
     
-    input = fopen("input.txt", "r");                   //Sets up file input.txt for reading
-    
-    while(feof(input) == 0){
-        fscanf(input, "%c", &c[i]);                    //Scans words from input.txt file
-        i++;
+    char *encrypted_message = encrypt(message, code);
+    printf("Original Message: %s\nEncrypted Message: %s\n", message, encrypted_message);
+    char *decrypted_message = decrypt(encrypted_message, code);
+    printf("Decrypted Message: %s\n", decrypted_message);
+}
+
+
+
+
+//Find character index
+int index(char code[], char char_to_find){
+    for(int i = 0; i < 26; i++){
+        if(code[i] == char_to_find){
+            return i;
+        }
     }
-
-    encryption(c);                                     //Encrypts the words from input.txt
-        
+    return -1;
 }
 
 
-
-//Function for encryption/decryption
-void encryption(char arr[]){
-    FILE *output;                                     //Establishes a file output.txt
-    output = fopen("output.txt", "w");                //Sets up file output.txt for writing
-    int i;
-    fprintf(output,"Rotation Cipher:");   
-    fprintf(output,"\nEncrypted (Rotation) Message: ");
+char* encrypt(char *message, char code[]){
+    int length = strlen(message);
+    char* encrypted_message = (char *) malloc(sizeof(char)*length);
     
-    for(i = 0; i < strlen(arr); i++){
-        arr[i] = arr[i] + 1;                          //Shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[i]);                //Writes the encrypted word to output.txt
+    for(int i = 0; i < length; i++){
+        int encryption_index = tolower(message[i]) - 'a';
+        if(encryption_index >= 0 && encryption_index < 26){
+            encrypted_message[i] = code[encryption_index];
+        }else{
+            encrypted_message[i] = message[i];
         }
-      
-    fprintf(output, "\nDecrypted (Rotation) Message: ");
-    int k;
-    
-    for(k = 0; k < strlen(arr); k++){
-        arr[k] = arr[k] - 1;                          //shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[k]);                //Writes the decrypted word to output.txt
-        }
+    }
+    return encrypted_message;
 }
 
 
-
+char *decrypt(char *message, char code[]){
+    int length = strlen(message);
+    char* decrypted_message = (char *) malloc(sizeof(char)*length);
+    
+    for(int i = 0; i < length; i++){
+        int decryption_index = tolower(message[i]) - 'a';
+        if(decryption_index >= 0 && decryption_index < 26){
+            int code_index = find_index(code, tolower(message[i]));
+            decrypted_message[i] = 'a' + code_index;
+        }else{
+            decrypted_message[i] = message[i];
+        }
+    }
+    return decrypted_message;
+}
