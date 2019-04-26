@@ -1,65 +1,70 @@
-#include<stdio.h>
 #include<stdlib.h>
+#include<stdio.h>
+#include<wchar.h>
 #include<string.h>
-#include<ctype.h>
+ 
+#define ENCRYPT 0
+#define DECRYPT 1
+#define ALPHA 33
+#define OMEGA 126
 
-int index(char code[], char char_to_find);
-char* encrypt(char *message, char code[]);
-char *decrypt(char *message, char code[]);
 
+ 
+int wideStrLen(wchar_t* str){
+	int i = 0;
+	while(str[i++]!=00);
+ 
+	return i;
+}
 
-int main(){
-    char *message = "test message";
-    char code[26] = {'b','a','c','d','s','f','g','g','h','i','j','k','l','m','n','o','p','q','r','e','t','u','v','w','x','y','z'};
-    
-    char *encrypted_message = encrypt(message, code);
-    printf("Original Message: %s\nEncrypted Message: %s\n", message, encrypted_message);
-    char *decrypted_message = decrypt(encrypted_message, code);
-    printf("Decrypted Message: %s\n", decrypted_message);
+ 
+void processFile(char* fileName,char plainKey, char cipherKey,int flag){
+ 
+	FILE* inpFile = fopen(fileName,"r");
+	FILE* outFile;
+ 
+	int i,len, diff = (flag==ENCRYPT)?(int)cipherKey - (int)plainKey:(int)plainKey - (int)cipherKey;
+	wchar_t str[1000], *outStr;
+	char* outFileName = (char*)malloc((strlen(fileName)+5)*sizeof(char));
+ 
+	sprintf(outFileName,"%s_%s",fileName,(flag==ENCRYPT)?"ENC":"DEC");
+ 
+	outFile = fopen(outFileName,"w");
+ 
+	while(fgetws(str,1000,inpFile)!=NULL){
+		len = wideStrLen(str);
+ 
+		outStr = (wchar_t*)malloc((len + 1)*sizeof(wchar_t));
+ 
+		for(i=0;i<len;i++){
+			if((int)str[i]>=ALPHA && (int)str[i]<=OMEGA && flag == ENCRYPT)
+				outStr[i] = (wchar_t)((int)str[i]+diff);
+			 else if((int)str[i]-diff>=ALPHA && (int)str[i]-diff<=OMEGA && flag == DECRYPT)
+				outStr[i] = (wchar_t)((int)str[i]-diff);
+			else
+				outStr[i] = str[i];
+		}
+		outStr[i]=str[i];
+ 
+		fputws(outStr,outFile);
+ 
+		free(outStr);
+	}
+ 
+	fclose(inpFile);
+	fclose(outFile);
 }
 
 
-
-
-//Find character index
-int index(char code[], char char_to_find){
-    for(int i = 0; i < 26; i++){
-        if(code[i] == char_to_find){
-            return i;
-        }
-    }
-    return -1;
-}
-
-
-char* encrypt(char *message, char code[]){
-    int length = strlen(message);
-    char* encrypted_message = (char *) malloc(sizeof(char)*length);
-    
-    for(int i = 0; i < length; i++){
-        int encryption_index = tolower(message[i]) - 'a';
-        if(encryption_index >= 0 && encryption_index < 26){
-            encrypted_message[i] = code[encryption_index];
-        }else{
-            encrypted_message[i] = message[i];
-        }
-    }
-    return encrypted_message;
-}
-
-
-char *decrypt(char *message, char code[]){
-    int length = strlen(message);
-    char* decrypted_message = (char *) malloc(sizeof(char)*length);
-    
-    for(int i = 0; i < length; i++){
-        int decryption_index = tolower(message[i]) - 'a';
-        if(decryption_index >= 0 && decryption_index < 26){
-            int code_index = find_index(code, tolower(message[i]));
-            decrypted_message[i] = 'a' + code_index;
-        }else{
-            decrypted_message[i] = message[i];
-        }
-    }
-    return decrypted_message;
+ 
+int main(int argC,char* argV[]){
+	if(argC!=5)
+		printf("Usage : %s <file name, plain key, cipher key, action (E)ncrypt or (D)ecrypt>",argV[0]);
+	else{
+		processFile(argV[1],argV[2][0],argV[3][0],(argV[4][0]=='E'||argV[4][0]=='e')?ENCRYPT:DECRYPT);
+ 
+		printf("File %s_%s has been written to the same location as input file.",argV[1],(argV[4][0]=='E'||argV[4][0]=='e')?"ENC":"DEC");
+	}
+ 
+	return 0;
 }
