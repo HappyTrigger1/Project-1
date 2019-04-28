@@ -1,52 +1,85 @@
+//Substitution Cipher
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
+
+//Function prototypes
+void encrypt(char *message);
+void decrypt(char *message);                                      //Prototype for decryption function
 
 
-void encryption(char arr[]);                           //Function prototype for encrypting
-void decryption(char arr[]);                           //Function prototype for decrypting
 
 
-int main() {
-
-    FILE *input;                                       //Establishes a file input.txt
-    char c[100000];
+//Main code
+int main(){
+    FILE *output;
+    FILE *input;
+    
+    input = fopen("input.txt", "r");
+    output = fopen("output.txt", "w");
+       
     int i = 0;
-    
-    input = fopen("input.txt", "r");                   //Sets up file input.txt for reading
-    
+    char message[10000];
+
     while(feof(input) == 0){
-        fscanf(input, "%c", &c[i]);                    //Scans words from input.txt file
+        fscanf(input, "%c", &message[i]);                    //Scans words from input.txt file
         i++;
     }
-
-    encryption(c);                                     //Encrypts the words from input.txt
-        
+   
+    int b = i-1;
+    for(i = 0; i < b;){
+        //printf("%c\n", message[i]);
+        i++;
+    }
+  
+    encrypt(message);                           //Encrypts message
+    fprintf(output, "Encrypted Text: ");
+    for(i = 0; i < b;){
+        fprintf(output, "%c", message[i]);
+        i++;
+    }
+    
+    decrypt(message);
+    fprintf(output, "\nDecrypted Text: ");
+    for(i = 0; i < b;){
+        fprintf(output, "%c", message[i]);
+        i++;
+    }
 }
 
 
-
-//Function for encryption/decryption
-void encryption(char arr[]){
-    FILE *output;                                     //Establishes a file output.txt
-    output = fopen("output.txt", "w");                //Sets up file output.txt for writing
-    int i;
-    fprintf(output,"Rotation Cipher");   
-    fprintf(output,"\nEncrypted (Rotation) Message: ");
-    
-    for(i = 0; i < strlen(arr); i++){
-        arr[i] = arr[i] + 1;                          //Shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[i]);                //Writes the encrypted word to output.txt
-        }
-      
-    fprintf(output, "\nDecrypted (Rotation) Message: ");
-    int k;
-    
-    for(k = 0; k < strlen(arr); k++){
-        arr[k] = arr[k] - 1;                          //shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[k]);                //Writes the decrypted word to output.txt
-        }
+//Function for encryption
+void encrypt(char *message){
+    int length = strlen(message);
+    int encryption_index;
+    char code[26] = {'g','l','c','d','s','t','b','x','y','j','k','m','a','o','n','p','q','r','e','f','u','v','w','z','i','h'};          //Substitution "alphabet"     
+    for(int i = 0; i < length; i++)
+    {
+        encryption_index = tolower(message[i]) - 'a';
+                    
+        if(encryption_index >= 0 && encryption_index < 26)
+        {
+            message[i] = code[encryption_index];
+            //printf("%c\n", message[i]);
+        }   
+    }
 }
 
-
-
+//Function for decryption
+void decrypt(char *message){
+    int length = strlen(message);
+    char code[26] = {'g','l','c','d','s','t','b','x','y','j','k','m','a','o','n','p','q','r','e','f','u','v','w','z','i','h'};
+    int j = 0; 
+    
+    for(int i = 0; i < length; i++){
+        j = 0;
+        while(code[j] != message[i] && j < 26){
+             j++;
+        }
+        if(j >= 0 && j < 26){
+            message[i] = (j + 'a');
+            //printf("%c\n", message[i]);
+        }         
+    }
+}
