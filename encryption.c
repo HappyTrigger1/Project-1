@@ -1,61 +1,86 @@
-//Rotation Cipher
+//Substitution Cipher
 #include<stdio.h>
 #include<stdlib.h>
 #include<string.h>
+#include<ctype.h>
+
+//Function prototypes
+void encrypt(char *message);
+void decrypt(char *message);                                      //Prototype for decryption function
 
 
-void rotEncrypt(char arr[]);                           //Function prototype for encrypting
 
 
-
-int main() {
-
-    FILE *input;                                       //Establishes a file input.txt
-    char c[10000];
+//Main code
+int main(){
+    //FILE *output;
+    FILE *input;
+    
+    input = fopen("input.txt", "r");
+    //output = fopen("output.txt", "w");
+       
     int i = 0;
-    
-    input = fopen("input.txt", "r+");                   //Sets up file input.txt for reading
-    
-    fprintf(input, "Rotation Cipher");
-    fprintf(input, "\nKey: 1");
-    fprintf(input, "\nPress run after message entered to encrypt message.");
-    fprintf(input, "\nType Message: ");
-   
-    
+    int b = 0;
+    char message[10000];
+
     while(feof(input) == 0){
-        fscanf(input, "%c", &c[i]);                    //Scans words from input.txt file
+        fscanf(input, "%c", &message[i]);                    //Scans words from input.txt file
         i++;
     }
-
-    rotEncrypt(c);                                     //Encrypts the words from input.txt
-        
+    
+    /*f*/printf(/*output,*/ "Substitution Cipher\n");
+    /*f*/printf(/*output,*/ "Encrypted (Substitution, no spaces) Text: ");
+    encrypt(message);                           //Encrypts message
+    
+    for(i = 0; i < b;){
+        /*f*/printf(/*output,*/ "%c", message[i]);
+        i++;
+    }
+    
+    /*f*/printf(/*output,*/ "\nDecrypted (Substitution, no spaces) Text: ");
+    decrypt(message);
+    for(i = 0; i < b;){
+        /*f*/printf(/*output,*/ "%c", message[i]);
+        i++;
+    }
 }
 
 
-
-//Function for encryption/decryption
-void rotEncrypt(char arr[]){
-    FILE *output;                                     //Establishes a file output.txt
-    output = fopen("output.txt", "w");                //Sets up file output.txt for writing
-    int i;
-    fprintf(output,"Rotation Cipher");   
-    fprintf(output, "\nKey: 1");
-    fprintf(output,"\nEncrypted (Rotation) Message: ");
-    
-    
-    for(i = 0; i < strlen(arr); i++){
-        arr[i] = arr[i] + 1;                          //Shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[i]);                //Writes the encrypted word to output.txt
-        }
-      
-    fprintf(output, "\nDecrypted (Rotation) Message: ");
-    int k;
-    
-    for(k = 0; k < strlen(arr); k++){
-        arr[k] = arr[k] - 1;                          //shifts letters across 1 for encryption
-        fprintf(output, "%c", arr[k]);                //Writes the decrypted word to output.txt
-        }
+//Function for encryption
+void encrypt(char *message){
+    //FILE *output;
+    //output = fopen("output.txt", "w");
+    int length = strlen(message);
+    int encryption_index;
+    char code[26] = {'g','l','c','d','s','t','b','x','y','j','k','m','a','o','n','p','q','r','e','f','u','v','w','z','i','h'};          //Substitution "alphabet"     
+    for(int i = 0; i < length; i++)
+    {
+        encryption_index = tolower(message[i]) - 'a';
+                    
+        if(encryption_index >= 0 && encryption_index < 26)
+        {
+            message[i] = code[encryption_index];
+            /*f*/printf(/*output,*/ "%c", message[i]);
+        }   
+    }
 }
 
-
-
+//Function for decryption
+void decrypt(char *message){
+    //FILE *output;
+    //output = fopen("output.txt", "w");
+    int length = strlen(message);
+    char code[26] = {'g','l','c','d','s','t','b','x','y','j','k','m','a','o','n','p','q','r','e','f','u','v','w','z','i','h'};
+    int j = 0; 
+    
+    for(int i = 0; i < length; i++){
+        j = 0;
+        while(code[j] != message[i] && j < 26){
+             j++;
+        }
+        if(j >= 0 && j < 26){
+            message[i] = (j + 'a');
+            /*f*/printf(/*output,*/ "%c", message[i]);
+        }        
+    }
+}
